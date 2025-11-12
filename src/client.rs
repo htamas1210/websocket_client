@@ -1,3 +1,6 @@
+use core::time;
+use std::thread::sleep;
+
 use futures_util::{SinkExt, StreamExt};
 use serde::{Deserialize, Serialize};
 use tokio_tungstenite::connect_async;
@@ -13,7 +16,7 @@ struct Message {
 
 #[tokio::main]
 async fn main() {
-    let url = Url::parse("ws://127.0.0.1:9001").unwrap();
+    let url = Url::parse("ws://192.168.50.53:9001").unwrap();
     let (mut socket, _) = connect_async(url).await.expect("Can't connect");
 
     loop {
@@ -32,5 +35,7 @@ async fn main() {
         if let Some(Ok(reply)) = socket.next().await {
             println!("Got reply: {}", reply);
         }
+
+        sleep(time::Duration::from_millis(500));
     }
 }
